@@ -1,8 +1,13 @@
+from django.shortcuts import render
 from .models import User, Calendar, Event
 from .serializers import UserSerializer, CalendarSerializer, EventSerializer
 from rest_framework import generics
 
 # Create your views here.
+
+
+def index(request):
+    return render(request, 'timesync/index.html')
 
 
 class UserListCreate(generics.ListCreateAPIView):
