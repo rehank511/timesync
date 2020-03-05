@@ -1,9 +1,13 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserView)
+router.register(r'calendars', views.CalendarView)
+router.register(r'events', views.EventView)
 
 urlpatterns = [
     path('', views.index),
-    path('api/user/', views.UserListCreate.as_view()),
-    path('api/calendar/', views.CalendarListCreate.as_view()),
-    path('api/event/', views.EventListCreate.as_view()),
+    path(r'api/', include(router.urls))
 ]

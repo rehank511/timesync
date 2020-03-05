@@ -16,7 +16,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch("api/event")
+    fetch("api/events")
       .then(response => {
         if (response.status > 400) {
           return this.setState(() => {
