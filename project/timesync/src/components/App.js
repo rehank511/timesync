@@ -38,31 +38,19 @@ class App extends Component {
   render() {
     return (
       <div>
-        <ul>
-          {this.state.data.map(event => {
-            return (
-              <li key={event.event_id}>
-                {event.name}
-                <ul>
-                  <li>
-                    <b>Location:</b> {event.location}
-                  </li>
-                  <li>
-                    <b>Start:</b> {event.start}
-                  </li>
-                  <li>
-                    <b>End:</b>
-                    {event.end}
-                  </li>
-                  <li>
-                    <b>Description:</b> {event.description}
-                  </li>
-                </ul>
-              </li>
-            );
-          })}
-        </ul>
-        <FullCalendar defaultView="dayGridMonth" plugins={[dayGridPlugin]} />
+        {this.state.data.map(event => {
+          event.id = event.event_id;
+          event.title = event.name;
+          console.log(event.start);
+          event.start = new Date(event.start);
+          event.end = new Date(event.end);
+          console.log(event.start);
+        })}
+        <FullCalendar
+          defaultView="dayGridMonth"
+          plugins={[dayGridPlugin]}
+          events={this.state.data}
+        />
       </div>
     );
   }
