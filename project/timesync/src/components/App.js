@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import bootstrapPlugin from "@fullcalendar/bootstrap";
+import "bootstrap";
+import "@fortawesome/fontawesome-free/js/all.js";
 
 import "../styles/main.scss";
 
@@ -48,7 +51,8 @@ class App extends Component {
         })}
         <FullCalendar
           defaultView="dayGridMonth"
-          plugins={[dayGridPlugin]}
+          plugins={[dayGridPlugin, bootstrapPlugin]}
+          themeSystem="bootstrap"
           events={this.state.data}
         />
       </div>
