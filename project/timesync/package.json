@@ -12,7 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.8.3",
     "autoprefixer": "^9.7.5",
     "babel-loader": "^8.0.6",
@@ -34,7 +35,8 @@
     "@fullcalendar/react": "^4.4.0",
     "bootstrap": "^4.4.1",
     "jquery": "^3.4.1",
-    "popper.js": "^1.16.1"
+    "popper.js": "^1.16.1",
+    "reactstrap": "^8.4.1"
   }
 <<<<<<< HEAD
 }
