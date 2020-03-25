@@ -54,6 +54,18 @@ class App extends Component {
     this.setState({ event });
   };
 
+  handleEventDelete = () => {
+    fetch(`api/events/${this.state.event.id}`,
+      {
+        method: "DELETE"
+      }).then(response => {
+        if (response.status < 300) {
+          this.toggle();
+          this.state.event.remove();
+        }
+      });
+  }
+
   render() {
     return (
       <div>
@@ -76,7 +88,7 @@ class App extends Component {
             {this.state.event.extendedProps.description}
           </ModalBody>
           <ModalFooter>
-            <Button className="mr-auto" color="danger" onClick={this.toggle}>Delete</Button>
+            <Button className="mr-auto" color="danger" onClick={this.handleEventDelete}>Delete</Button>
             <Button color="secondary" onClick={this.toggle}>Cancel</Button>
           </ModalFooter>
         </Modal>
