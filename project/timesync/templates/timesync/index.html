@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 
@@ -5,12 +6,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TimeSync</title>
+    <link rel="icon" type="image/png" href="{%static "timesync/img/favicon.png" %}">
 </head>
 
 <body>
-    <nav class="navbar navbar-light bg-light">
+    <nav class=" navbar navbar-light bg-light">
         <a class="navbar-brand" href="#">
-            {% load static %}
             <img src="{%static "timesync/img/logo.png" %}" width="30" height="30" class="d-inline-block align-top"
                 alt="logo">
             TimeSync
@@ -22,7 +23,6 @@
         </div>
     </div>
 </body>
-{% load static %}
 <script src="{% static "timesync/main.js" %}"></script>
 
 </html>
