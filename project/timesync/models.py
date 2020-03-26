@@ -5,7 +5,7 @@ from django.core.validators import int_list_validator
 
 
 class User(models.Model):
-    user_id = models.IntegerField(primary_key=True)
+    user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=100)
     email = models.EmailField()
@@ -13,17 +13,18 @@ class User(models.Model):
 
 
 class Calendar(models.Model):
-    calendar_id = models.IntegerField(primary_key=True)
-    user_id = models.IntegerField()
+    calendar_id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    events = models.CharField(max_length=100, validators=[int_list_validator])
 
 
 class Event(models.Model):
-    event_id = models.IntegerField(primary_key=True)
-    calendar_id = models.IntegerField()
-    name = models.CharField(max_length=100)
-    location = models.CharField(max_length=250)
+    event_id = models.AutoField(primary_key=True)
+    calendar_id = models.ForeignKey(Calendar, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    location = models.CharField(
+        max_length=250, null=True, blank=True, default="")
     start = models.DateTimeField()
     end = models.DateTimeField()
-    description = models.TextField()
+    description = models.TextField(
+        max_length=500, null=True, blank=True, default="")

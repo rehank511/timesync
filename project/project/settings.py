@@ -25,7 +25,7 @@ SECRET_KEY = '4^ik0v59-h2ifjr+s9ixu8lg!d%@im22%ib8fw(j8#0%=h0+zs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '50.112.22.16']
 
 
 # Application definition
@@ -79,7 +79,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'timesync',
-        'USER': 'postgres',
+        'USER': 'timesync',
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '',

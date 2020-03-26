@@ -5,17 +5,16 @@ from .models import User, Calendar, Event
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('user_id', 'username', 'password', 'email')
+        fields = ('__all__')
 
 
 class CalendarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Calendar
-        fields = ('calendar_id', 'user_id', 'name', 'events')
+        fields = ('__all__')
 
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ('event_id', 'calendar_id', 'name',
-                  'location', 'start', 'end', 'description')
+        fields = ('__all__')
