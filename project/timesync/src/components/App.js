@@ -103,6 +103,7 @@ class App extends Component {
       }).then(response => {
         if (response.status < 300) {
           this.state.event.remove();
+          this.state.events = this.state.events.filter(event => event.id != this.state.event.id);
           this.toggleEditModal();
         }
       });
