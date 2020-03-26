@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid"
+import listPlugin from "@fullcalendar/list"
 import bootstrapPlugin from "@fullcalendar/bootstrap";
+import interactionPlugin from "@fullcalendar/interaction"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import "@fortawesome/fontawesome-free/js/all.js";
 
@@ -66,6 +69,10 @@ class App extends Component {
       });
   }
 
+  handleDateClick = (info) => {
+    console.log(info);
+  }
+
   render() {
     return (
       <div>
@@ -77,10 +84,16 @@ class App extends Component {
         })}
         <FullCalendar
           defaultView="dayGridMonth"
-          plugins={[dayGridPlugin, bootstrapPlugin]}
+          header={{
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek"
+          }}
+          plugins={[dayGridPlugin, timeGridPlugin, listPlugin, bootstrapPlugin, interactionPlugin]}
           themeSystem="bootstrap"
           events={this.state.data}
           eventClick={this.handleEventClick}
+          dateClick={this.handleDateClick}
         />
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>{this.state.event.title}</ModalHeader>
