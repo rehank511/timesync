@@ -24,13 +24,14 @@ class App extends Component {
         title: "",
         start: "",
         end: "",
-        startDate: "",
-        startTime: "",
-        endDate: "",
-        endTime: "",
         extendedProps: {
+          startDate: "",
+          startTime: "",
+          endDate: "",
+          endTime: "",
           location: "",
-          description: ""
+          description: "",
+          edited: false,
         }
       },
       newEvent: {
@@ -73,37 +74,50 @@ class App extends Component {
     this.setState({ editModal: !this.state.editModal });
   };
 
-  handleEventClick = ({ event, el }) => {
+  handleEventClick = ({ event }) => {
+    var event = {
+      id: event.id,
+      title: event.title,
+      start: event.start,
+      end: event.end,
+      extendedProps: {
+        location: event.extendedProps.location,
+        description: event.extendedProps.description
+      }
+    };
     if (event.start.length === 0) {
-      event.startDate = "";
-      event.startTime = "";
+      event.extendedProps.startDate = "";
+      event.extendedProps.startTime = "";
     } else {
       let date = new Date(event.start)
       date = new Date(date - (date.getTimezoneOffset() * 60000)).toISOString();
-      event.startDate = date.substring(0, 10);
-      event.startTime = date.substring(11, 16);
+      event.extendedProps.startDate = date.substring(0, 10);
+      event.extendedProps.startTime = date.substring(11, 16);
     }
     if (event.end.length === 0) {
-      event.endDate = "";
-      event.endTime = "";
+      event.extendedProps.endDate = "";
+      event.extendedProps.endTime = "";
     } else {
       let date = new Date(event.end);
       date = new Date(date - (date.getTimezoneOffset() * 60000)).toISOString();
-      event.endDate = date.substring(0, 10);
-      event.endTime = date.substring(11, 16);
+      event.extendedProps.endDate = date.substring(0, 10);
+      event.extendedProps.endTime = date.substring(11, 16);
     }
+    event.extendedProps.edited = false;
     this.setState({ event });
     this.toggleEditModal();
   };
 
   handleEventDelete = () => {
-    fetch(`api/events/${this.state.event.id}`,
+    fetch(`api/events/${this.state.event.id}/`,
       {
         method: "DELETE"
       }).then(response => {
         if (response.status < 300) {
           this.state.event.remove();
-          this.state.events = this.state.events.filter(event => event.id != this.state.event.id);
+          this.setState({
+            events: this.state.events.filter(event => event.id != this.state.event.id)
+          });
           this.toggleEditModal();
         }
       });
@@ -151,6 +165,45 @@ class App extends Component {
     });
   }
 
+  handleEventEdit = () => {
+    if (this.state.event.extendedProps.edited) {
+      let event = {
+        event_id: this.state.event.id,
+        calendar_id: 1,
+        title: this.state.event.title,
+        location: this.state.event.extendedProps.location,
+        start: this.state.event.start,
+        end: this.state.event.end,
+        description: this.state.event.extendedProps.description
+      }
+      console.log(event);
+      fetch(`api/events/${this.state.event.id}/`, {
+        method: "PUT",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(event)
+      }).then(response => {
+        if (response.status > 400) {
+          return this.setState(() => {
+            return { placeholder: "Something went wrong!" };
+          });
+        }
+        return response.json();
+      }).then((event) => {
+        event.id = event.event_id;
+        console.log(event);
+        this.setState({
+          events: this.state.events.map(e => e.id == event.id ? e = event : e)
+        });
+        this.toggleEditModal();
+      });
+    } else {
+      this.toggleEditModal();
+    }
+  }
+
   render() {
     return (
       <div>
@@ -178,16 +231,24 @@ class App extends Component {
             <ModalHeader toggle={this.toggleEditModal}>Event Details</ModalHeader>
             <ModalBody>
               <FormGroup row>
-                <Label for="title" sm={2}>Title</Label>
+                <Label sm={2}>Title</Label>
                 <Col sm={10}>
-                  <Input type="text" name="title" placeholder="Title" defaultValue={this.state.event.title}>
+                  <Input type="text" placeholder="Title" defaultValue={this.state.event.title}
+                    onChange={e => {
+                      this.state.event.title = e.target.value;
+                      this.state.event.extendedProps.edited = true;
+                    }}>
                   </Input>
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Label for="location" sm={2}>Location</Label>
+                <Label sm={2}>Location</Label>
                 <Col sm={10}>
-                  <Input type="text" name="location" placeholder="Location" defaultValue={this.state.event.extendedProps.location}>
+                  <Input type="text" placeholder="Location" defaultValue={this.state.event.extendedProps.location}
+                    onChange={e => {
+                      this.state.event.extendedProps.location = e.target.value;
+                      this.state.event.extendedProps.edited = true;
+                    }}>
                   </Input>
                 </Col>
               </FormGroup>
@@ -196,11 +257,21 @@ class App extends Component {
                   <Label>Start</Label>
                 </Col>
                 <Col sm={6}>
-                  <Input type="date" name="startDate" defaultValue={this.state.event.startDate}>
+                  <Input type="date" defaultValue={this.state.event.extendedProps.startDate}
+                    onChange={e => {
+                      this.state.event.start = new Date(`${e.target.value} ${this.state.event.extendedProps.startTime}`);
+                      this.state.event.extendedProps.startDate = e.target.value;
+                      this.state.event.extendedProps.edited = true;
+                    }}>
                   </Input>
                 </Col>
                 <Col sm={4}>
-                  <Input type="time" name="startTime" defaultValue={this.state.event.startTime}>
+                  <Input type="time" defaultValue={this.state.event.extendedProps.startTime}
+                    onChange={e => {
+                      this.state.event.start = new Date(`${this.state.event.extendedProps.startDate} ${e.target.value}`);
+                      this.state.event.extendedProps.startTime = e.target.value;
+                      this.state.event.extendedProps.edited = true;
+                    }}>
                   </Input>
                 </Col>
               </FormGroup>
@@ -209,23 +280,38 @@ class App extends Component {
                   <Label>End</Label>
                 </Col>
                 <Col sm={6}>
-                  <Input type="date" name="endDate" defaultValue={this.state.event.endDate}>
+                  <Input type="date" name="endDate" defaultValue={this.state.event.extendedProps.endDate}
+                    onChange={e => {
+                      this.state.event.end = new Date(`${e.target.value} ${this.state.event.extendedProps.endTime}`);
+                      this.state.event.extendedProps.endDate = e.target.value;
+                      this.state.event.extendedProps.edited = true;
+                    }}>
                   </Input>
                 </Col>
                 <Col sm={4}>
-                  <Input type="time" name="endTime" defaultValue={this.state.event.endTime}>
+                  <Input type="time" name="endTime" defaultValue={this.state.event.extendedProps.endTime}
+                    onChange={e => {
+                      this.state.event.end = new Date(`${this.state.event.extendedProps.endDate} ${e.target.value}`);
+                      this.state.event.extendedProps.endTime = e.target.value;
+                      this.state.event.extendedProps.edited = true;
+                    }}>
                   </Input>
                 </Col>
               </FormGroup>
               <FormGroup>
-                <Label for="description">Description</Label>
-                <Input type="textarea" name="description" placeholder="None" defaultValue={this.state.event.extendedProps.description}>
+                <Label>Description</Label>
+                <Input type="textarea" placeholder="None" defaultValue={this.state.event.extendedProps.description}
+                  onChange={e => {
+                    this.state.event.extendedProps.description = e.target.value;
+                    this.state.event.extendedProps.edited = true;
+                  }}>
                 </Input>
               </FormGroup>
             </ModalBody>
             <ModalFooter>
               <Button className="mr-auto" color="danger" onClick={this.handleEventDelete}>Delete</Button>
               <Button color="secondary" onClick={this.toggleEditModal}>Cancel</Button>
+              <Button color="primary" onClick={this.handleEventEdit}>Save</Button>
             </ModalFooter>
           </Form>
         </Modal>
@@ -235,9 +321,9 @@ class App extends Component {
             <ModalHeader toggle={this.toggleCreateModal}>Create Event</ModalHeader>
             <ModalBody>
               <FormGroup row>
-                <Label for="title" sm={2}>Title</Label>
+                <Label sm={2}>Title</Label>
                 <Col sm={10}>
-                  <Input type="text" name="title" id="title" placeholder="Title"
+                  <Input type="text" placeholder="Title"
                     onChange={e => {
                       this.state.newEvent.title = e.target.value;
                     }}>
@@ -245,9 +331,9 @@ class App extends Component {
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Label for="location" sm={2}>Location</Label>
+                <Label sm={2}>Location</Label>
                 <Col sm={10}>
-                  <Input type="text" name="location" id="location" placeholder="Location"
+                  <Input type="text" placeholder="Location"
                     onChange={e => {
                       this.state.newEvent.extendedProps.location = e.target.value;
                     }}>
@@ -259,7 +345,7 @@ class App extends Component {
                   <Label>Start</Label>
                 </Col>
                 <Col sm={6}>
-                  <Input type="date" name="startDate" id="startDate" defaultValue={this.state.newEvent.extendedProps.startDate}
+                  <Input type="date" defaultValue={this.state.newEvent.extendedProps.startDate}
                     onChange={e => {
                       this.state.newEvent.start = new Date(`${e.target.value} ${this.state.newEvent.extendedProps.startTime}`);
                       this.state.newEvent.extendedProps.startDate = e.target.value;
@@ -267,7 +353,7 @@ class App extends Component {
                   </Input>
                 </Col>
                 <Col sm={4}>
-                  <Input type="time" name="startTime" id="startTime"
+                  <Input type="time"
                     onChange={e => {
                       this.state.newEvent.start = new Date(`${this.state.newEvent.extendedProps.startDate} ${e.target.value}`);
                       this.state.newEvent.extendedProps.startTime = e.target.value;
@@ -280,7 +366,7 @@ class App extends Component {
                   <Label>End</Label>
                 </Col>
                 <Col sm={6}>
-                  <Input type="date" name="endDate" id="endDate" defaultValue={this.state.newEvent.extendedProps.endDate}
+                  <Input type="date" defaultValue={this.state.newEvent.extendedProps.endDate}
                     onChange={e => {
                       this.state.newEvent.end = new Date(`${e.target.value} ${this.state.newEvent.extendedProps.endTime}`);
                       this.state.newEvent.extendedProps.endDate = e.target.value;
@@ -288,7 +374,7 @@ class App extends Component {
                   </Input>
                 </Col>
                 <Col sm={4}>
-                  <Input type="time" name="endTime" id="endTime"
+                  <Input type="time"
                     onChange={e => {
                       this.state.newEvent.end = new Date(`${this.state.newEvent.extendedProps.endDate} ${e.target.value}`);
                       this.state.newEvent.extendedProps.endTime = e.target.value;
@@ -297,8 +383,8 @@ class App extends Component {
                 </Col>
               </FormGroup>
               <FormGroup>
-                <Label for="description">Description</Label>
-                <Input type="textarea" name="description" id="description" placeholder="None"
+                <Label>Description</Label>
+                <Input type="textarea" placeholder="None"
                   onChange={e => {
                     this.state.newEvent.extendedProps.description = e.target.value;
                   }}>
