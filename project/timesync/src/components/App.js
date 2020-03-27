@@ -114,7 +114,6 @@ class App extends Component {
         method: "DELETE"
       }).then(response => {
         if (response.status < 300) {
-          this.state.event.remove();
           this.setState({
             events: this.state.events.filter(event => event.id != this.state.event.id)
           });
