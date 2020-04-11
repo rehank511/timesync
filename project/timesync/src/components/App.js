@@ -1,19 +1,36 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
-
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../store";
+import PrivateRoute from "./common/PrivateRoute";
 
+import { loadUser } from '../actions/auth';
+import Header from "./layout/Header";
 import Calendar from "./calendar/Calendar";
-
+import Login from "./account/Login";
+import Register from "./account/Register";
 import "../styles/main.scss";
 
 class App extends Component {
+  componentDidMount() {
+    store.dispatch(loadUser());
+  }
 
   render() {
     return (
       <Provider store={store}>
-        <Calendar />
+        <Router>
+          <Header />
+          <Switch>
+            <Route exact path="/">
+              <Redirect to="/calendar" />
+            </Route>
+            <PrivateRoute exact path="/calendar" component={Calendar} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Register} />
+          </Switch>
+        </Router>
       </Provider>
     );
   }

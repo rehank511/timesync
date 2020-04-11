@@ -1,21 +1,11 @@
 from django.db import models
-from django.core.validators import int_list_validator
-
-# Create your models here.
-
-
-class User(models.Model):
-    id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=50)
-    password = models.CharField(max_length=100)
-    email = models.EmailField()
-    created_at = models.DateTimeField(auto_now_add=True)
+from django.contrib.auth.models import User
 
 
 class Calendar(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    user = models.ForeignKey(
+        User, related_name="calendar", on_delete=models.CASCADE)
 
 
 class Event(models.Model):

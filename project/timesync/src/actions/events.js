@@ -26,8 +26,6 @@ export const deleteEvent = id => dispatch => {
 }
 
 export const addEvent = event => dispatch => {
-    event.description = event.extendedProps.description;
-    event.location = event.extendedProps.location;
     fetch("api/events/", {
         method: "POST",
         headers: {

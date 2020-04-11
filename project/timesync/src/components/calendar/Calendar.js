@@ -15,15 +15,12 @@ import { getEvents, deleteEvent, addEvent, updateEvent } from "../../actions/eve
 class Calendar extends Component {
     state = {
         event: {
-            id: 0,
-            calendar: 1,
+            calendar: 0,
             title: "",
             start: "",
             end: "",
-            extendedProps: {
-                location: "",
-                description: "",
-            },
+            location: "",
+            description: "",
             startDate: "",
             startTime: "",
             endDate: "",
@@ -41,20 +38,19 @@ class Calendar extends Component {
         getEvents: PropTypes.func.isRequired,
         deleteEvent: PropTypes.func.isRequired,
         addEvent: PropTypes.func.isRequired,
-        updateEvent: PropTypes.func.isRequired
+        updateEvent: PropTypes.func.isRequired,
+        user: PropTypes.object.isRequired,
     }
 
     onEventClick = e => {
         let event = {
             id: e.event.id,
-            calendar: 1,
             title: e.event.title,
             start: e.event.start,
             end: e.event.end,
-            extendedProps: {
-                location: e.event.extendedProps.location,
-                description: e.event.extendedProps.description,
-            },
+            location: e.event.extendedProps.location,
+            description: e.event.extendedProps.description,
+            calendar: e.event.extendedProps.calendar,
             startDate: "",
             startTime: "",
             endDate: "",
@@ -86,14 +82,12 @@ class Calendar extends Component {
 
     onDateClick = info => {
         let event = {
-            calendar: 1,
+            calendar: this.props.user.calendar.id,
             title: "",
             start: "",
             end: "",
-            extendedProps: {
-                location: "",
-                description: "",
-            },
+            location: "",
+            description: "",
             startDate: info.dateStr,
             startTime: "",
             endDate: info.dateStr,
@@ -143,7 +137,7 @@ class Calendar extends Component {
 
     render() {
         return (
-            <Fragment>
+            <div className="container">
                 <FullCalendar
                     defaultView="dayGridMonth"
                     header={{
@@ -176,9 +170,9 @@ class Calendar extends Component {
                             <FormGroup row>
                                 <Label sm={2}>Location</Label>
                                 <Col sm={10}>
-                                    <Input type="text" placeholder="Location" defaultValue={this.state.event.extendedProps.location}
+                                    <Input type="text" placeholder="Location" defaultValue={this.state.event.location}
                                         onChange={e => {
-                                            this.state.event.extendedProps.location = e.target.value;
+                                            this.state.event.location = e.target.value;
                                             this.state.event.event.edited = true;
                                         }}>
                                     </Input>
@@ -232,9 +226,9 @@ class Calendar extends Component {
                             </FormGroup>
                             <FormGroup>
                                 <Label>Description</Label>
-                                <Input type="textarea" placeholder="None" defaultValue={this.state.event.extendedProps.description}
+                                <Input type="textarea" placeholder="None" defaultValue={this.state.event.description}
                                     onChange={e => {
-                                        this.state.event.extendedProps.description = e.target.value;
+                                        this.state.event.description = e.target.value;
                                         this.state.event.edited = true;
                                     }}>
                                 </Input>
@@ -329,14 +323,15 @@ class Calendar extends Component {
                         </ModalFooter>
                     </Form>
                 </Modal>
-            </Fragment>
+            </div>
         );
     }
 }
 
 
 const mapStateToProps = state => ({
-    events: state.events.events
+    events: state.events.events,
+    user: state.auth.user,
 });
 
 export default connect(mapStateToProps, { getEvents, deleteEvent, addEvent, updateEvent })(Calendar);
