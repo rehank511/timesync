@@ -1,12 +1,18 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../store";
 import PrivateRoute from "./common/PrivateRoute";
 
-import { loadUser } from '../actions/auth';
+import { loadUser } from "../actions/auth";
 import Header from "./layout/Header";
+import HomeCalendar from "./calendar/HomeCalendar";
 import Calendar from "./calendar/Calendar";
 import Login from "./account/Login";
 import Register from "./account/Register";
@@ -26,7 +32,8 @@ class App extends Component {
             <Route exact path="/">
               <Redirect to="/calendar" />
             </Route>
-            <PrivateRoute exact path="/calendar" component={Calendar} />
+            <PrivateRoute exact path="/calendar" component={HomeCalendar} />
+            <Route exact path="/calendar/:calendar" component={Calendar} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Register} />
           </Switch>

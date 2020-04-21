@@ -29,10 +29,21 @@ class LoginSerializer(serializers.Serializer):
         raise serializers.ValidationError("Invalid Credentials")
 
 
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ('__all__')
+
+
 class CalendarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Calendar
-        fields = ('__all__')
+        fields = ('id', 'user', 'events')
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['events'] = EventSerializer(instance.events, many=True).data
+        return response
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -46,9 +57,3 @@ class UserSerializer(serializers.ModelSerializer):
         response['calendar'] = CalendarSerializer(
             instance.calendar, many=True).data[0]
         return response
-
-
-class EventSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Event
-        fields = ('__all__')

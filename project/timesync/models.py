@@ -10,7 +10,8 @@ class Calendar(models.Model):
 
 class Event(models.Model):
     id = models.AutoField(primary_key=True)
-    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
+    calendar = models.ForeignKey(
+        Calendar, related_name="events", on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     location = models.CharField(
         max_length=250, null=True, blank=True, default="")
