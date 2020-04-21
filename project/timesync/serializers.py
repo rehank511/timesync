@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from .models import Calendar, Event
+from .models import Calendar, Event, Friendship
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.db.models import Q
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -46,14 +47,34 @@ class CalendarSerializer(serializers.ModelSerializer):
         return response
 
 
+class FriendshipSerializer(serializers.ModelSerializer):
+    calendar = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Friendship
+        fields = ('__all__')
+
+    def get_calendar(self, instance):
+        user = instance.creator if self.context.get(
+            'user') is instance.friend else instance.friend
+        return CalendarSerializer(Calendar.objects.filter(user=user), many=True).data[0]
+
+
 class UserSerializer(serializers.ModelSerializer):
+    friends = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = ('id', 'username', 'email',
-                  'first_name', 'last_name', 'calendar')
+                  'first_name', 'last_name', 'calendar', 'friends')
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response['calendar'] = CalendarSerializer(
             instance.calendar, many=True).data[0]
         return response
+
+    def get_friends(self, instance):
+        friendships = Friendship.objects.filter(
+            Q(creator=instance.id) | Q(friend=instance.id))
+        return FriendshipSerializer(friendships, many=True, context={'user': instance.id}).data

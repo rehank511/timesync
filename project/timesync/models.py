@@ -19,3 +19,10 @@ class Event(models.Model):
     end = models.DateTimeField()
     description = models.TextField(
         max_length=500, null=True, blank=True, default="")
+
+
+class Friendship(models.Model):
+    creator = models.ForeignKey(
+        User, related_name="creator", on_delete=models.CASCADE)
+    friend = models.ForeignKey(
+        User, related_name="friend", on_delete=models.CASCADE)

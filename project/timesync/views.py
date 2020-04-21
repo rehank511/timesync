@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import User, Calendar, Event
-from .serializers import RegisterSerializer, LoginSerializer, UserSerializer, CalendarSerializer, EventSerializer
+from .models import User, Calendar, Event, Friendship
+from .serializers import RegisterSerializer, LoginSerializer, UserSerializer, CalendarSerializer, EventSerializer, FriendshipSerializer
 from rest_framework import viewsets, generics, permissions, response
 from knox.models import AuthToken
 
@@ -54,3 +54,8 @@ class CalendarView(viewsets.ModelViewSet):
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+
+
+class FriendshipView(viewsets.ModelViewSet):
+    queryset = Friendship.objects.all()
+    serializer_class = FriendshipSerializer

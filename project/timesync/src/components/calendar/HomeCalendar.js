@@ -147,7 +147,7 @@ class Calendar extends Component {
   };
 
   componentDidMount() {
-    this.props.getEvents(this.props.user.calendar.id);
+    this.props.getEvents(this.props.user);
   }
 
   render() {

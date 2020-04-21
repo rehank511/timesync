@@ -1,17 +1,15 @@
 import { GET_EVENTS, ADD_EVENT, UPDATE_EVENT, DELETE_EVENT } from "./types";
 
-export const getEvents = (id) => (dispatch) => {
-  fetch(`/api/calendars/${id}/`)
-    .then((response) => {
-      return response.json();
-    })
-    .then((calendar) => {
-      dispatch({
-        type: GET_EVENTS,
-        payload: calendar.events,
-      });
-    })
-    .catch((err) => console.log(err));
+export const getEvents = (user) => (dispatch) => {
+  let events = user.calendar.events;
+  user.friends.forEach((friend) =>
+    friend.calendar.events.forEach((event) => events.push(event))
+  );
+  console.log(events);
+  dispatch({
+    type: GET_EVENTS,
+    payload: events,
+  });
 };
 
 export const deleteEvent = (id) => (dispatch) => {
