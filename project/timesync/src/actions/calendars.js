@@ -1,7 +1,7 @@
 import { GET_CALENDAR } from "./types";
 
-export const getCalendar = (id) => (dispatch) => {
-  fetch(`/api/calendars/${id}/`)
+export const getCalendar = (username) => (dispatch) => {
+  fetch(`/api/calendars/${username}/`)
     .then((response) => {
       return response.json();
     })

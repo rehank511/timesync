@@ -49,6 +49,7 @@ class UserView(generics.RetrieveAPIView):
 class CalendarView(viewsets.ModelViewSet):
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
+    lookup_field = 'username'
 
 
 class EventView(viewsets.ModelViewSet):

@@ -5,7 +5,7 @@ from knox import views as knox_views
 
 router = routers.DefaultRouter()
 # router.register('users', views.UserView)
-router.register('calendars', views.CalendarView)
+router.register('calendars', views.CalendarView, basename='Calendar')
 router.register('events', views.EventView)
 router.register('friendships', views.FriendshipView)
 

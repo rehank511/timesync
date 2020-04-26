@@ -5,7 +5,6 @@ export const getEvents = (user) => (dispatch) => {
   user.friends.forEach((friend) =>
     friend.calendar.events.forEach((event) => events.push(event))
   );
-  console.log(events);
   dispatch({
     type: GET_EVENTS,
     payload: events,

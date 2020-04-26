@@ -13,9 +13,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = User.objects.create_user(validated_data['username'], validated_data['email'], validated_data['password'],
+        user = User.objects.create_user(validated_data['email'], validated_data['email'], validated_data['password'],
                                         first_name=validated_data['first_name'], last_name=validated_data['last_name'])
-        calendar = Calendar.objects.create(user=user)
+        calendar = Calendar.objects.create(
+            user=user, username=validated_data['username'])
         return user
 
 
@@ -56,7 +57,7 @@ class FriendshipSerializer(serializers.ModelSerializer):
 
     def get_calendar(self, instance):
         user = instance.creator if self.context.get(
-            'user') is instance.friend else instance.friend
+            'user') == instance.friend.username else instance.friend
         return CalendarSerializer(Calendar.objects.filter(user=user), many=True).data[0]
 
 

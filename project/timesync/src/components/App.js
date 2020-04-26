@@ -33,9 +33,9 @@ class App extends Component {
               <Redirect to="/calendar" />
             </Route>
             <PrivateRoute exact path="/calendar" component={HomeCalendar} />
-            <Route exact path="/calendar/:calendar" component={Calendar} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Register} />
+            <Route exact path="/:calendar" component={Calendar} />
           </Switch>
         </Router>
       </Provider>
