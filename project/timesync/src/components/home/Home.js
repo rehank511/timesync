@@ -188,10 +188,16 @@ class Calendar extends Component {
                   <Input
                     type="text"
                     placeholder="Title"
-                    defaultValue={this.state.event.title}
+                    value={this.state.event.title}
                     onChange={(e) => {
-                      this.state.event.title = e.target.value;
-                      this.state.event.event.edited = true;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          title: e.target.value,
+                          edited: true,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
@@ -202,10 +208,16 @@ class Calendar extends Component {
                   <Input
                     type="text"
                     placeholder="Location"
-                    defaultValue={this.state.event.location}
+                    value={this.state.event.location}
                     onChange={(e) => {
-                      this.state.event.location = e.target.value;
-                      this.state.event.event.edited = true;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          location: e.target.value,
+                          edited: true,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
@@ -217,26 +229,38 @@ class Calendar extends Component {
                 <Col sm={6}>
                   <Input
                     type="date"
-                    defaultValue={this.state.event.startDate}
+                    value={this.state.event.startDate}
                     onChange={(e) => {
-                      this.state.event.start = new Date(
-                        `${e.target.value} ${this.state.event.startTime}`
-                      );
-                      this.state.event.startDate = e.target.value;
-                      this.state.event.event.edited = true;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          start: new Date(
+                            `${e.target.value} ${this.state.event.startTime}`
+                          ),
+                          startDate: e.target.value,
+                          edited: true,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
                 <Col sm={4}>
                   <Input
                     type="time"
-                    defaultValue={this.state.event.startTime}
+                    value={this.state.event.startTime}
                     onChange={(e) => {
-                      this.state.event.start = new Date(
-                        `${this.state.event.startDate} ${e.target.value}`
-                      );
-                      this.state.event.startTime = e.target.value;
-                      this.state.event.event.edited = true;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          start: new Date(
+                            `${this.state.event.startDate} ${e.target.value}`
+                          ),
+                          startTime: e.target.value,
+                          edited: true,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
@@ -251,11 +275,17 @@ class Calendar extends Component {
                     name="endDate"
                     defaultValue={this.state.event.endDate}
                     onChange={(e) => {
-                      this.state.event.end = new Date(
-                        `${e.target.value} ${this.state.event.endTime}`
-                      );
-                      this.state.event.endDate = e.target.value;
-                      this.state.event.event.edited = true;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          start: new Date(
+                            `${e.target.value} ${this.state.event.endTime}`
+                          ),
+                          endDate: e.target.value,
+                          edited: true,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
@@ -263,13 +293,19 @@ class Calendar extends Component {
                   <Input
                     type="time"
                     name="endTime"
-                    defaultValue={this.state.event.endTime}
+                    value={this.state.event.endTime}
                     onChange={(e) => {
-                      this.state.event.end = new Date(
-                        `${this.state.event.endDate} ${e.target.value}`
-                      );
-                      this.state.event.endTime = e.target.value;
-                      this.state.event.event.edited = true;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          start: new Date(
+                            `${this.state.event.endDate} ${e.target.value}`
+                          ),
+                          endTime: e.target.value,
+                          edited: true,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
@@ -281,8 +317,14 @@ class Calendar extends Component {
                   placeholder="None"
                   defaultValue={this.state.event.description}
                   onChange={(e) => {
-                    this.state.event.description = e.target.value;
-                    this.state.event.edited = true;
+                    this.setState({
+                      ...this.state,
+                      event: {
+                        ...this.state.event,
+                        description: e.target.value,
+                        edited: true,
+                      },
+                    });
                   }}
                 ></Input>
               </FormGroup>
@@ -321,7 +363,13 @@ class Calendar extends Component {
                     type="text"
                     placeholder="Title"
                     onChange={(e) => {
-                      this.state.event.title = e.target.value;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          title: e.target.value,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
@@ -333,7 +381,13 @@ class Calendar extends Component {
                     type="text"
                     placeholder="Location"
                     onChange={(e) => {
-                      this.state.event.extendedProps.location = e.target.value;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          location: e.target.value,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
@@ -347,10 +401,16 @@ class Calendar extends Component {
                     type="date"
                     defaultValue={this.state.event.startDate}
                     onChange={(e) => {
-                      this.state.event.start = new Date(
-                        `${e.target.value} ${this.state.event.startTime}`
-                      );
-                      this.state.event.startDate = e.target.value;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          start: new Date(
+                            `${e.target.value} ${this.state.event.startTime}`
+                          ),
+                          startDate: e.target.value,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
@@ -358,10 +418,16 @@ class Calendar extends Component {
                   <Input
                     type="time"
                     onChange={(e) => {
-                      this.state.event.start = new Date(
-                        `${this.state.event.startDate} ${e.target.value}`
-                      );
-                      this.state.event.startTime = e.target.value;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          start: new Date(
+                            `${this.state.event.startDate} ${e.target.value}`
+                          ),
+                          startTime: e.target.value,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
@@ -375,10 +441,16 @@ class Calendar extends Component {
                     type="date"
                     defaultValue={this.state.event.endDate}
                     onChange={(e) => {
-                      this.state.event.end = new Date(
-                        `${e.target.value} ${this.state.event.endTime}`
-                      );
-                      this.state.event.endDate = e.target.value;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          end: new Date(
+                            `${e.target.value} ${this.state.event.endTime}`
+                          ),
+                          endDate: e.target.value,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
@@ -386,10 +458,16 @@ class Calendar extends Component {
                   <Input
                     type="time"
                     onChange={(e) => {
-                      this.state.event.end = new Date(
-                        `${this.state.event.endDate} ${e.target.value}`
-                      );
-                      this.state.event.endTime = e.target.value;
+                      this.setState({
+                        ...this.state,
+                        event: {
+                          ...this.state.event,
+                          end: new Date(
+                            `${this.state.event.endDate} ${e.target.value}`
+                          ),
+                          endTime: e.target.value,
+                        },
+                      });
                     }}
                   ></Input>
                 </Col>
@@ -400,7 +478,13 @@ class Calendar extends Component {
                   type="textarea"
                   placeholder="None"
                   onChange={(e) => {
-                    this.state.event.extendedProps.description = e.target.value;
+                    this.setState({
+                      ...this.state,
+                      event: {
+                        ...this.state.event,
+                        description: e.target.value,
+                      },
+                    });
                   }}
                 ></Input>
               </FormGroup>

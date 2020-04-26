@@ -45,8 +45,6 @@ export const addEvent = (event) => (dispatch) => {
 };
 
 export const updateEvent = (event) => (dispatch) => {
-  event.description = event.extendedProps.description;
-  event.location = event.extendedProps.location;
   fetch(`/api/events/${event.id}/`, {
     method: "PUT",
     headers: {

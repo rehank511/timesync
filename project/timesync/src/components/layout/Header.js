@@ -24,7 +24,7 @@ class Header extends Component {
     const authLinks = (
       <Nav>
         <NavItem>
-          <Link to="/calendar" className="nav-link">
+          <Link to="/" className="nav-link">
             Home
           </Link>
         </NavItem>

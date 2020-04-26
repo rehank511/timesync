@@ -12,7 +12,7 @@ import PrivateRoute from "./common/PrivateRoute";
 
 import { loadUser } from "../actions/auth";
 import Header from "./layout/Header";
-import HomeCalendar from "./calendar/HomeCalendar";
+import Home from "./home/Home";
 import Calendar from "./calendar/Calendar";
 import Login from "./account/Login";
 import Register from "./account/Register";
@@ -29,10 +29,7 @@ class App extends Component {
         <Router>
           <Header />
           <Switch>
-            <Route exact path="/">
-              <Redirect to="/calendar" />
-            </Route>
-            <PrivateRoute exact path="/calendar" component={HomeCalendar} />
+            <PrivateRoute exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Register} />
             <Route exact path="/:calendar" component={Calendar} />
