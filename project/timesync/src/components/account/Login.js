@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Form, Input, Button } from "reactstrap";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../actions/auth";
+import Header from "../layout/Header";
 
 import "../../styles/login.scss";
 
@@ -36,44 +37,47 @@ class Login extends Component {
       return <Redirect to="/" />;
     }
     return (
-      <div className="container">
-        <div className="signin text-center">
-          <Form onSubmit={this.onSubmit}>
-            <h1 className="h3">Login</h1>
-            <Input
-              type="email"
-              className="form-control"
-              placeholder="Email"
-              required
-              autoFocus
-              value={this.state.email}
-              onChange={(e) => {
-                this.setState({
-                  email: e.target.value,
-                });
-              }}
-            />
-            <Input
-              type="password"
-              className="form-control"
-              placeholder="Password"
-              required
-              value={this.state.password}
-              onChange={(e) => {
-                this.setState({
-                  password: e.target.value,
-                });
-              }}
-            />
-            <Button type="submit" color="primary">
-              Login
-            </Button>
-          </Form>
-          <p className="text-left">
-            Don't have an account? <Link to="/signup">Sign up.</Link>
-          </p>
+      <Fragment>
+        <Header />
+        <div className="container">
+          <div className="signin text-center">
+            <Form onSubmit={this.onSubmit}>
+              <h1 className="h3">Login</h1>
+              <Input
+                type="email"
+                className="form-control"
+                placeholder="Email"
+                required
+                autoFocus
+                value={this.state.email}
+                onChange={(e) => {
+                  this.setState({
+                    email: e.target.value,
+                  });
+                }}
+              />
+              <Input
+                type="password"
+                className="form-control"
+                placeholder="Password"
+                required
+                value={this.state.password}
+                onChange={(e) => {
+                  this.setState({
+                    password: e.target.value,
+                  });
+                }}
+              />
+              <Button type="submit" color="primary">
+                Login
+              </Button>
+            </Form>
+            <p className="text-left">
+              Don't have an account? <Link to="/signup">Sign up.</Link>
+            </p>
+          </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }

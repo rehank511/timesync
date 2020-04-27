@@ -11,7 +11,6 @@ import store from "../store";
 import PrivateRoute from "./common/PrivateRoute";
 
 import { loadUser } from "../actions/auth";
-import Header from "./layout/Header";
 import Home from "./home/Home";
 import Calendar from "./calendar/Calendar";
 import Login from "./account/Login";
@@ -27,7 +26,6 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <Header />
           <Switch>
             <PrivateRoute exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />

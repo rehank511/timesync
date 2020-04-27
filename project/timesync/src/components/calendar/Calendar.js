@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -23,6 +23,7 @@ import PropTypes from "prop-types";
 import { getCalendar } from "../../actions/calendars";
 import { addFriend, removeFriend } from "../../actions/friends";
 import { getEvents } from "../../actions/events";
+import Header from "../layout/Header";
 
 import "../../styles/calendar.scss";
 
@@ -162,119 +163,122 @@ class Calendar extends Component {
     }
 
     return (
-      <div className="container">
-        <FullCalendar
-          defaultView="dayGridMonth"
-          customButtons={
-            this.props.isAuthenticated &&
-            this.props.user.calendar.username !=
-              this.props.match.params.calendar
-              ? synced
-                ? unsyncButton
-                : syncButton
-              : {}
-          }
-          header={{
-            left: "prev,next today sync unsync",
-            center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
-          }}
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            listPlugin,
-            bootstrapPlugin,
-            interactionPlugin,
-          ]}
-          themeSystem="bootstrap"
-          events={events}
-          eventClick={this.onEventClick}
-        />
+      <Fragment>
+        <Header />
+        <div className="container">
+          <FullCalendar
+            defaultView="dayGridMonth"
+            customButtons={
+              this.props.isAuthenticated &&
+              this.props.user.calendar.username !=
+                this.props.match.params.calendar
+                ? synced
+                  ? unsyncButton
+                  : syncButton
+                : {}
+            }
+            header={{
+              left: "prev,next today sync unsync",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+            }}
+            plugins={[
+              dayGridPlugin,
+              timeGridPlugin,
+              listPlugin,
+              bootstrapPlugin,
+              interactionPlugin,
+            ]}
+            themeSystem="bootstrap"
+            events={events}
+            eventClick={this.onEventClick}
+          />
 
-        <Modal isOpen={this.state.isOpen} toggle={this.toggleModal}>
-          <Form>
-            <ModalHeader toggle={this.toggleModal}>Event Details</ModalHeader>
-            <ModalBody>
-              <FormGroup row>
-                <Label sm={2}>Title</Label>
-                <Col sn={10}>
+          <Modal isOpen={this.state.isOpen} toggle={this.toggleModal}>
+            <Form>
+              <ModalHeader toggle={this.toggleModal}>Event Details</ModalHeader>
+              <ModalBody>
+                <FormGroup row>
+                  <Label sm={2}>Title</Label>
+                  <Col sn={10}>
+                    <Input
+                      type="text"
+                      placeholder="Title"
+                      defaultValue={this.state.event.title}
+                      readOnly
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label sm={2}>Location</Label>
+                  <Col sm={10}>
+                    <Input
+                      type="text"
+                      placeholder="Location"
+                      defaultValue={this.state.event.location}
+                      readOnly
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col sm={2}>
+                    <Label>Start</Label>
+                  </Col>
+                  <Col sm={6}>
+                    <Input
+                      type="date"
+                      defaultValue={this.state.event.startDate}
+                      readOnly
+                    ></Input>
+                  </Col>
+                  <Col sm={4}>
+                    <Input
+                      type="time"
+                      defaultValue={this.state.event.startTime}
+                      readOnly
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col sm={2}>
+                    <Label>End</Label>
+                  </Col>
+                  <Col sm={6}>
+                    <Input
+                      type="date"
+                      name="endDate"
+                      defaultValue={this.state.event.endDate}
+                      readOnly
+                    ></Input>
+                  </Col>
+                  <Col sm={4}>
+                    <Input
+                      type="time"
+                      name="endTime"
+                      defaultValue={this.state.event.endTime}
+                      readOnly
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Label>Description</Label>
                   <Input
-                    type="text"
-                    placeholder="Title"
-                    defaultValue={this.state.event.title}
+                    type="textarea"
+                    placeholder="None"
+                    defaultValue={this.state.event.description}
                     readOnly
                   ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label sm={2}>Location</Label>
-                <Col sm={10}>
-                  <Input
-                    type="text"
-                    placeholder="Location"
-                    defaultValue={this.state.event.location}
-                    readOnly
-                  ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col sm={2}>
-                  <Label>Start</Label>
-                </Col>
-                <Col sm={6}>
-                  <Input
-                    type="date"
-                    defaultValue={this.state.event.startDate}
-                    readOnly
-                  ></Input>
-                </Col>
-                <Col sm={4}>
-                  <Input
-                    type="time"
-                    defaultValue={this.state.event.startTime}
-                    readOnly
-                  ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col sm={2}>
-                  <Label>End</Label>
-                </Col>
-                <Col sm={6}>
-                  <Input
-                    type="date"
-                    name="endDate"
-                    defaultValue={this.state.event.endDate}
-                    readOnly
-                  ></Input>
-                </Col>
-                <Col sm={4}>
-                  <Input
-                    type="time"
-                    name="endTime"
-                    defaultValue={this.state.event.endTime}
-                    readOnly
-                  ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Label>Description</Label>
-                <Input
-                  type="textarea"
-                  placeholder="None"
-                  defaultValue={this.state.event.description}
-                  readOnly
-                ></Input>
-              </FormGroup>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onClick={this.toggleModal}>
-                Close
-              </Button>
-            </ModalFooter>
-          </Form>
-        </Modal>
-      </div>
+                </FormGroup>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="secondary" onClick={this.toggleModal}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </Form>
+          </Modal>
+        </div>
+      </Fragment>
     );
   }
 }

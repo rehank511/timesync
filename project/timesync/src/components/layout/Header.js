@@ -18,7 +18,7 @@ import {
 import "../../styles/nav.scss";
 
 const Brand = (props) => {
-  if (props.history.location.pathname != "/") {
+  if (props.calendar) {
     return (
       <NavItem>
         <Link to="/" className="brand">
@@ -29,9 +29,7 @@ const Brand = (props) => {
           />
           TimeSync
         </Link>
-        <span className="brand-username">
-          @{props.history.location.pathname.substring(1)}
-        </span>
+        <span className="brand-username">@{props.calendar}</span>
       </NavItem>
     );
   } else {
@@ -97,7 +95,7 @@ class Header extends Component {
           </Link>
         </NavItem>
         <NavItem>
-          <NavLink href="#logout" onClick={this.props.logout}>
+          <NavLink href="" onClick={this.props.logout}>
             Logout
           </NavLink>
         </NavItem>
@@ -118,11 +116,10 @@ class Header extends Component {
         </NavItem>
       </Nav>
     );
-
     return (
       <Navbar className="bg-light">
         <Nav>
-          <Brand history={this.props.history} />
+          <Brand calendar={this.props.match.params.calendar} />
         </Nav>
         {this.props.auth.isAuthenticated ? authLinks : guestLinks}
       </Navbar>

@@ -26,6 +26,7 @@ import {
   addEvent,
   updateEvent,
 } from "../../actions/events";
+import Header from "../layout/Header";
 
 class Calendar extends Component {
   state = {
@@ -153,354 +154,357 @@ class Calendar extends Component {
 
   render() {
     return (
-      <div className="container">
-        <FullCalendar
-          defaultView="dayGridMonth"
-          header={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
-          }}
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            listPlugin,
-            bootstrapPlugin,
-            interactionPlugin,
-          ]}
-          themeSystem="bootstrap"
-          events={this.props.events}
-          eventClick={this.onEventClick}
-          dateClick={this.onDateClick}
-        />
+      <Fragment>
+        <Header />
+        <div className="container">
+          <FullCalendar
+            defaultView="dayGridMonth"
+            header={{
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+            }}
+            plugins={[
+              dayGridPlugin,
+              timeGridPlugin,
+              listPlugin,
+              bootstrapPlugin,
+              interactionPlugin,
+            ]}
+            themeSystem="bootstrap"
+            events={this.props.events}
+            eventClick={this.onEventClick}
+            dateClick={this.onDateClick}
+          />
 
-        <Modal
-          isOpen={this.state.modalVisibility.edit}
-          toggle={this.toggleEditModal}
-        >
-          <Form>
-            <ModalHeader toggle={this.toggleEditModal}>
-              Event Details
-            </ModalHeader>
-            <ModalBody>
-              <FormGroup row>
-                <Label sm={2}>Title</Label>
-                <Col sm={10}>
+          <Modal
+            isOpen={this.state.modalVisibility.edit}
+            toggle={this.toggleEditModal}
+          >
+            <Form>
+              <ModalHeader toggle={this.toggleEditModal}>
+                Event Details
+              </ModalHeader>
+              <ModalBody>
+                <FormGroup row>
+                  <Label sm={2}>Title</Label>
+                  <Col sm={10}>
+                    <Input
+                      type="text"
+                      placeholder="Title"
+                      value={this.state.event.title}
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            title: e.target.value,
+                            edited: true,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label sm={2}>Location</Label>
+                  <Col sm={10}>
+                    <Input
+                      type="text"
+                      placeholder="Location"
+                      value={this.state.event.location}
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            location: e.target.value,
+                            edited: true,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col sm={2}>
+                    <Label>Start</Label>
+                  </Col>
+                  <Col sm={6}>
+                    <Input
+                      type="date"
+                      value={this.state.event.startDate}
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            start: new Date(
+                              `${e.target.value} ${this.state.event.startTime}`
+                            ),
+                            startDate: e.target.value,
+                            edited: true,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                  <Col sm={4}>
+                    <Input
+                      type="time"
+                      value={this.state.event.startTime}
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            start: new Date(
+                              `${this.state.event.startDate} ${e.target.value}`
+                            ),
+                            startTime: e.target.value,
+                            edited: true,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col sm={2}>
+                    <Label>End</Label>
+                  </Col>
+                  <Col sm={6}>
+                    <Input
+                      type="date"
+                      name="endDate"
+                      defaultValue={this.state.event.endDate}
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            start: new Date(
+                              `${e.target.value} ${this.state.event.endTime}`
+                            ),
+                            endDate: e.target.value,
+                            edited: true,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                  <Col sm={4}>
+                    <Input
+                      type="time"
+                      name="endTime"
+                      value={this.state.event.endTime}
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            start: new Date(
+                              `${this.state.event.endDate} ${e.target.value}`
+                            ),
+                            endTime: e.target.value,
+                            edited: true,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Label>Description</Label>
                   <Input
-                    type="text"
-                    placeholder="Title"
-                    value={this.state.event.title}
+                    type="textarea"
+                    placeholder="None"
+                    defaultValue={this.state.event.description}
                     onChange={(e) => {
                       this.setState({
                         ...this.state,
                         event: {
                           ...this.state.event,
-                          title: e.target.value,
+                          description: e.target.value,
                           edited: true,
                         },
                       });
                     }}
                   ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label sm={2}>Location</Label>
-                <Col sm={10}>
-                  <Input
-                    type="text"
-                    placeholder="Location"
-                    value={this.state.event.location}
-                    onChange={(e) => {
-                      this.setState({
-                        ...this.state,
-                        event: {
-                          ...this.state.event,
-                          location: e.target.value,
-                          edited: true,
-                        },
-                      });
-                    }}
-                  ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col sm={2}>
-                  <Label>Start</Label>
-                </Col>
-                <Col sm={6}>
-                  <Input
-                    type="date"
-                    value={this.state.event.startDate}
-                    onChange={(e) => {
-                      this.setState({
-                        ...this.state,
-                        event: {
-                          ...this.state.event,
-                          start: new Date(
-                            `${e.target.value} ${this.state.event.startTime}`
-                          ),
-                          startDate: e.target.value,
-                          edited: true,
-                        },
-                      });
-                    }}
-                  ></Input>
-                </Col>
-                <Col sm={4}>
-                  <Input
-                    type="time"
-                    value={this.state.event.startTime}
-                    onChange={(e) => {
-                      this.setState({
-                        ...this.state,
-                        event: {
-                          ...this.state.event,
-                          start: new Date(
-                            `${this.state.event.startDate} ${e.target.value}`
-                          ),
-                          startTime: e.target.value,
-                          edited: true,
-                        },
-                      });
-                    }}
-                  ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col sm={2}>
-                  <Label>End</Label>
-                </Col>
-                <Col sm={6}>
-                  <Input
-                    type="date"
-                    name="endDate"
-                    defaultValue={this.state.event.endDate}
-                    onChange={(e) => {
-                      this.setState({
-                        ...this.state,
-                        event: {
-                          ...this.state.event,
-                          start: new Date(
-                            `${e.target.value} ${this.state.event.endTime}`
-                          ),
-                          endDate: e.target.value,
-                          edited: true,
-                        },
-                      });
-                    }}
-                  ></Input>
-                </Col>
-                <Col sm={4}>
-                  <Input
-                    type="time"
-                    name="endTime"
-                    value={this.state.event.endTime}
-                    onChange={(e) => {
-                      this.setState({
-                        ...this.state,
-                        event: {
-                          ...this.state.event,
-                          start: new Date(
-                            `${this.state.event.endDate} ${e.target.value}`
-                          ),
-                          endTime: e.target.value,
-                          edited: true,
-                        },
-                      });
-                    }}
-                  ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Label>Description</Label>
-                <Input
-                  type="textarea"
-                  placeholder="None"
-                  defaultValue={this.state.event.description}
-                  onChange={(e) => {
-                    this.setState({
-                      ...this.state,
-                      event: {
-                        ...this.state.event,
-                        description: e.target.value,
-                        edited: true,
-                      },
-                    });
-                  }}
-                ></Input>
-              </FormGroup>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                className="mr-auto"
-                color="danger"
-                onClick={this.onEventDelete}
-              >
-                Delete
-              </Button>
-              <Button color="secondary" onClick={this.toggleEditModal}>
-                Cancel
-              </Button>
-              <Button color="primary" onClick={this.onEventEdit}>
-                Save
-              </Button>
-            </ModalFooter>
-          </Form>
-        </Modal>
+                </FormGroup>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  className="mr-auto"
+                  color="danger"
+                  onClick={this.onEventDelete}
+                >
+                  Delete
+                </Button>
+                <Button color="secondary" onClick={this.toggleEditModal}>
+                  Cancel
+                </Button>
+                <Button color="primary" onClick={this.onEventEdit}>
+                  Save
+                </Button>
+              </ModalFooter>
+            </Form>
+          </Modal>
 
-        <Modal
-          isOpen={this.state.modalVisibility.create}
-          toggle={this.toggleCreateModal}
-        >
-          <Form>
-            <ModalHeader toggle={this.toggleCreateModal}>
-              Create Event
-            </ModalHeader>
-            <ModalBody>
-              <FormGroup row>
-                <Label sm={2}>Title</Label>
-                <Col sm={10}>
+          <Modal
+            isOpen={this.state.modalVisibility.create}
+            toggle={this.toggleCreateModal}
+          >
+            <Form>
+              <ModalHeader toggle={this.toggleCreateModal}>
+                Create Event
+              </ModalHeader>
+              <ModalBody>
+                <FormGroup row>
+                  <Label sm={2}>Title</Label>
+                  <Col sm={10}>
+                    <Input
+                      type="text"
+                      placeholder="Title"
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            title: e.target.value,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label sm={2}>Location</Label>
+                  <Col sm={10}>
+                    <Input
+                      type="text"
+                      placeholder="Location"
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            location: e.target.value,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col sm={2}>
+                    <Label>Start</Label>
+                  </Col>
+                  <Col sm={6}>
+                    <Input
+                      type="date"
+                      defaultValue={this.state.event.startDate}
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            start: new Date(
+                              `${e.target.value} ${this.state.event.startTime}`
+                            ),
+                            startDate: e.target.value,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                  <Col sm={4}>
+                    <Input
+                      type="time"
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            start: new Date(
+                              `${this.state.event.startDate} ${e.target.value}`
+                            ),
+                            startTime: e.target.value,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col sm={2}>
+                    <Label>End</Label>
+                  </Col>
+                  <Col sm={6}>
+                    <Input
+                      type="date"
+                      defaultValue={this.state.event.endDate}
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            end: new Date(
+                              `${e.target.value} ${this.state.event.endTime}`
+                            ),
+                            endDate: e.target.value,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                  <Col sm={4}>
+                    <Input
+                      type="time"
+                      onChange={(e) => {
+                        this.setState({
+                          ...this.state,
+                          event: {
+                            ...this.state.event,
+                            end: new Date(
+                              `${this.state.event.endDate} ${e.target.value}`
+                            ),
+                            endTime: e.target.value,
+                          },
+                        });
+                      }}
+                    ></Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Label>Description</Label>
                   <Input
-                    type="text"
-                    placeholder="Title"
+                    type="textarea"
+                    placeholder="None"
                     onChange={(e) => {
                       this.setState({
                         ...this.state,
                         event: {
                           ...this.state.event,
-                          title: e.target.value,
+                          description: e.target.value,
                         },
                       });
                     }}
                   ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label sm={2}>Location</Label>
-                <Col sm={10}>
-                  <Input
-                    type="text"
-                    placeholder="Location"
-                    onChange={(e) => {
-                      this.setState({
-                        ...this.state,
-                        event: {
-                          ...this.state.event,
-                          location: e.target.value,
-                        },
-                      });
-                    }}
-                  ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col sm={2}>
-                  <Label>Start</Label>
-                </Col>
-                <Col sm={6}>
-                  <Input
-                    type="date"
-                    defaultValue={this.state.event.startDate}
-                    onChange={(e) => {
-                      this.setState({
-                        ...this.state,
-                        event: {
-                          ...this.state.event,
-                          start: new Date(
-                            `${e.target.value} ${this.state.event.startTime}`
-                          ),
-                          startDate: e.target.value,
-                        },
-                      });
-                    }}
-                  ></Input>
-                </Col>
-                <Col sm={4}>
-                  <Input
-                    type="time"
-                    onChange={(e) => {
-                      this.setState({
-                        ...this.state,
-                        event: {
-                          ...this.state.event,
-                          start: new Date(
-                            `${this.state.event.startDate} ${e.target.value}`
-                          ),
-                          startTime: e.target.value,
-                        },
-                      });
-                    }}
-                  ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col sm={2}>
-                  <Label>End</Label>
-                </Col>
-                <Col sm={6}>
-                  <Input
-                    type="date"
-                    defaultValue={this.state.event.endDate}
-                    onChange={(e) => {
-                      this.setState({
-                        ...this.state,
-                        event: {
-                          ...this.state.event,
-                          end: new Date(
-                            `${e.target.value} ${this.state.event.endTime}`
-                          ),
-                          endDate: e.target.value,
-                        },
-                      });
-                    }}
-                  ></Input>
-                </Col>
-                <Col sm={4}>
-                  <Input
-                    type="time"
-                    onChange={(e) => {
-                      this.setState({
-                        ...this.state,
-                        event: {
-                          ...this.state.event,
-                          end: new Date(
-                            `${this.state.event.endDate} ${e.target.value}`
-                          ),
-                          endTime: e.target.value,
-                        },
-                      });
-                    }}
-                  ></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Label>Description</Label>
-                <Input
-                  type="textarea"
-                  placeholder="None"
-                  onChange={(e) => {
-                    this.setState({
-                      ...this.state,
-                      event: {
-                        ...this.state.event,
-                        description: e.target.value,
-                      },
-                    });
-                  }}
-                ></Input>
-              </FormGroup>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onClick={this.toggleCreateModal}>
-                Cancel
-              </Button>
-              <Button color="primary" onClick={this.onEventCreate}>
-                Create
-              </Button>
-            </ModalFooter>
-          </Form>
-        </Modal>
-      </div>
+                </FormGroup>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="secondary" onClick={this.toggleCreateModal}>
+                  Cancel
+                </Button>
+                <Button color="primary" onClick={this.onEventCreate}>
+                  Create
+                </Button>
+              </ModalFooter>
+            </Form>
+          </Modal>
+        </div>
+      </Fragment>
     );
   }
 }
