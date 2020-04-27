@@ -2,9 +2,9 @@ import { GET_EVENTS, ADD_EVENT, UPDATE_EVENT, DELETE_EVENT } from "./types";
 
 export const getEvents = (user) => (dispatch) => {
   let events = user.calendar.events;
-  user.friends.forEach((friend) =>
-    friend.calendar.events.forEach((event) => events.push(event))
-  );
+  // user.friends.forEach((friend) =>
+  //   friend.calendar.events.forEach((event) => events.push(event))
+  // );
   dispatch({
     type: GET_EVENTS,
     payload: events,

@@ -21,13 +21,25 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getCalendar } from "../../actions/calendars";
+import { addFriend, removeFriend } from "../../actions/friends";
+import { getEvents } from "../../actions/events";
+
+import "../../styles/calendar.scss";
 
 class Calendar extends Component {
   static propTypes = {
+    getCalendar: PropTypes.func.isRequired,
     calendar: PropTypes.object.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired,
+    user: PropTypes.object,
+    addFriend: PropTypes.func.isRequired,
+    removeFriend: PropTypes.func.isRequired,
+    events: PropTypes.array.isRequired,
+    getEvents: PropTypes.func.isRequired,
   };
 
   state = {
+    events: [],
     event: {
       calendar: 0,
       title: "",
@@ -87,17 +99,82 @@ class Calendar extends Component {
     });
   };
 
+  isSynced = () => {
+    let synced = false;
+    if (this.props.user) {
+      this.props.user.friends.forEach((friend) => {
+        if (friend.calendar.username == this.props.match.params.calendar) {
+          synced = true;
+        }
+      });
+    }
+    return synced;
+  };
+
+  sync = () => {
+    this.props.addFriend(this.props.user.id, this.props.calendar.user);
+  };
+
+  unsync = () => {
+    this.props.user.friends.forEach((friend) => {
+      if (friend.calendar.username == this.props.match.params.calendar) {
+        this.props.removeFriend(friend);
+      }
+    });
+  };
+
   componentDidMount() {
     this.props.getCalendar(this.props.match.params.calendar);
   }
 
+  componentDidUpdate() {
+    if (this.props.user) {
+      this.props.getEvents(this.props.user);
+    }
+  }
+
   render() {
+    const synced = this.isSynced();
+    const syncButton = {
+      sync: {
+        text: `Sync with @${this.props.match.params.calendar}`,
+        click: this.sync,
+      },
+    };
+
+    const unsyncButton = {
+      unsync: {
+        text: `Unsync with @${this.props.match.params.calendar}`,
+        click: this.unsync,
+      },
+    };
+
+    let events = [];
+    if (synced && this.props.calendar.events) {
+      this.props.calendar.events.forEach((event) => {
+        event.backgroundColor = "#8e61c7";
+        event.borderColor = "#8e61c7";
+      });
+      events = [...this.props.events, ...this.props.calendar.events];
+    } else {
+      events = this.props.calendar.events;
+    }
+
     return (
       <div className="container">
         <FullCalendar
           defaultView="dayGridMonth"
+          customButtons={
+            this.props.isAuthenticated &&
+            this.props.user.calendar.username !=
+              this.props.match.params.calendar
+              ? synced
+                ? unsyncButton
+                : syncButton
+              : {}
+          }
           header={{
-            left: "prev,next today",
+            left: "prev,next today sync unsync",
             center: "title",
             right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
           }}
@@ -109,7 +186,7 @@ class Calendar extends Component {
             interactionPlugin,
           ]}
           themeSystem="bootstrap"
-          events={this.props.calendar.events}
+          events={events}
           eventClick={this.onEventClick}
         />
 
@@ -203,8 +280,14 @@ class Calendar extends Component {
 
 const mapStateToProps = (state) => ({
   calendar: state.calendars.calendar,
+  events: state.events.events,
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, {
   getCalendar,
+  addFriend,
+  removeFriend,
+  getEvents,
 })(Calendar);

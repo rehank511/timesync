@@ -40,7 +40,7 @@ class EventSerializer(serializers.ModelSerializer):
 class CalendarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Calendar
-        fields = ('id', 'user', 'events')
+        fields = ('__all__')
 
     def to_representation(self, instance):
         response = super().to_representation(instance)

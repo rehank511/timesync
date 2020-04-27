@@ -7,11 +7,13 @@ import {
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
+  ADD_FRIEND,
+  DELETE_FRIEND,
 } from "../actions/types";
 
 const initialState = {
   token: localStorage.getItem("token"),
-  isAuthenticated: null,
+  isAuthenticated: false,
   isLoading: true,
   user: null,
 };
@@ -50,6 +52,24 @@ export default function (state = initialState, action) {
         user: null,
         isAuthenticated: false,
         isLoading: false,
+      };
+    case ADD_FRIEND:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          friends: [...state.user.friends, action.payload],
+        },
+      };
+    case DELETE_FRIEND:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          friends: state.user.friends.filter(
+            (friend) => friend.id != action.payload.id
+          ),
+        },
       };
     default:
       return state;

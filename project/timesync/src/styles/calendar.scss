@@ -1,0 +1,13 @@
+.fc-unsync-button {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+
+  &:hover {
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5) !important;
+  }
+}
