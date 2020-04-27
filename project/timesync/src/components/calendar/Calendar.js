@@ -128,6 +128,7 @@ class Calendar extends Component {
   }
 
   componentDidUpdate() {
+    document.title = `@${this.props.match.params.calendar} | TimeSync`;
     if (this.props.user) {
       this.props.getEvents(this.props.user);
     }
@@ -137,14 +138,14 @@ class Calendar extends Component {
     const synced = this.isSynced();
     const syncButton = {
       sync: {
-        text: `Sync with @${this.props.match.params.calendar}`,
+        text: "Sync",
         click: this.sync,
       },
     };
 
     const unsyncButton = {
       unsync: {
-        text: `Unsync with @${this.props.match.params.calendar}`,
+        text: "Unsync",
         click: this.unsync,
       },
     };

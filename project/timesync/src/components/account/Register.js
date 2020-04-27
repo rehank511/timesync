@@ -38,6 +38,10 @@ class Register extends Component {
     this.props.register(user);
   };
 
+  componentDidMount() {
+    document.title = "Sign Up | TimeSync";
+  }
+
   render() {
     if (this.props.isAuthenticated) {
       return <Redirect to="/" />;

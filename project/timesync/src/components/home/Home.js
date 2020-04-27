@@ -148,6 +148,7 @@ class Calendar extends Component {
 
   componentDidMount() {
     this.props.getEvents(this.props.user);
+    document.title = "TimeSync";
   }
 
   render() {
