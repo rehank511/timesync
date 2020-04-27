@@ -113,7 +113,9 @@ class Calendar extends Component {
   };
 
   sync = () => {
-    this.props.addFriend(this.props.user.id, this.props.calendar.user);
+    if (this.props.user.id != this.props.calendar.user) {
+      this.props.addFriend(this.props.user.id, this.props.calendar.user);
+    }
   };
 
   unsync = () => {
