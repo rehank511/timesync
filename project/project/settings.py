@@ -25,7 +25,7 @@ SECRET_KEY = '4^ik0v59-h2ifjr+s9ixu8lg!d%@im22%ib8fw(j8#0%=h0+zs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '50.112.22.16']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'timesync.site', '52.13.198.30']
 
 
 # Application definition
