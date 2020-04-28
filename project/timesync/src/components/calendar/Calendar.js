@@ -40,7 +40,6 @@ class Calendar extends Component {
   };
 
   state = {
-    events: [],
     event: {
       calendar: 0,
       title: "",
@@ -130,9 +129,15 @@ class Calendar extends Component {
     this.props.getCalendar(this.props.match.params.calendar);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     document.title = `@${this.props.match.params.calendar} | TimeSync`;
-    if (this.props.user) {
+    if (
+      this.props.calendar &&
+      this.props.calendar.username != this.props.match.params.calendar
+    ) {
+      this.props.getCalendar(this.props.match.params.calendar);
+    }
+    if (this.props.user && !prevProps.user) {
       this.props.getEvents(this.props.user);
     }
   }
