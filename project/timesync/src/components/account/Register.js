@@ -59,6 +59,7 @@ class Register extends Component {
                 className="form-control"
                 placeholder="Username"
                 required
+                autoFocus
                 value={this.state.username}
                 onChange={(e) => {
                   this.setState({
@@ -83,7 +84,6 @@ class Register extends Component {
                 className="form-control"
                 placeholder="First Name"
                 required
-                autoFocus
                 value={this.state.first}
                 onChange={(e) => {
                   this.setState({
